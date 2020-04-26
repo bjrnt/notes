@@ -1,0 +1,43 @@
+@tailwind base;
+
+h1 {
+  @apply text-3xl leading-relaxed mt-3;
+}
+
+h2 {
+  @apply text-xl leading-relaxed mt-2;
+}
+
+h3 {
+  @apply text-lg  leading-relaxed mt-2;
+}
+
+a {
+  @apply text-blue-600 underline leading-relaxed mt-2;
+}
+
+p {
+  @apply mb-2;
+}
+
+ul {
+  @apply list-disc list-inside;
+}
+
+ol {
+  @apply list-decimal list-inside;
+}
+
+ol ul,
+ul ol,
+ol ol,
+ul ul {
+  @apply ml-6 mt-1;
+}
+
+li {
+  @apply mb-1;
+}
+
+@tailwind components;
+@tailwind utilities;
