@@ -18,9 +18,14 @@
     "remark-footnotes": "^1.0.0",
     "remark-html": "^11.0.1",
     "remark-parse": "^8.0.2",
+    "remark-stringify": "^8.0.0",
+    "strip-markdown": "^3.1.2",
     "to-vfile": "^6.1.0",
     "unified": "^9.0.0",
-    "unist-util-visit": "^2.0.2"
+    "unist-util-is": "^4.0.2",
+    "unist-util-visit": "^2.0.2",
+    "unist-util-visit-parents": "^3.0.2",
+    "vfile": "^4.1.0"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",

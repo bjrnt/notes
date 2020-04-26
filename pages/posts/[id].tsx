@@ -1,9 +1,5 @@
 import Layout from "../../components/layout";
-import {
-  getAllPostIds,
-  getPostData,
-  getInboundLinksMap,
-} from "../../lib/posts";
+import { getAllPostIds, getPostData } from "../../lib/posts";
 import { GetStaticPaths, GetStaticProps } from "next";
 import unified from "unified";
 import * as React from "react";
@@ -13,6 +9,7 @@ import markdown from "remark-parse";
 import footnotes from "remark-footnotes";
 import { MarkdownLink } from "../../components/markdown-link";
 import Link from "next/link";
+import { Post as PostData } from "../../lib/post";
 
 const markdownProcessor = unified()
   .use(markdown)
@@ -25,38 +22,23 @@ const markdownProcessor = unified()
     },
   });
 
-export default function Post({
-  postData,
-  inboundLinks,
-}: {
-  postData: {
-    title: string;
-    date: string;
-    contents: string;
-  };
-  inboundLinks: string[];
-}) {
+export default function Post({ post }: { post: PostData }) {
   return (
     <Layout>
-      {postData.title}
+      {(markdownProcessor.processSync(post.contents) as any).result}
       <br />
-      {postData.date}
-      <br />
-      {(markdownProcessor.processSync(postData.contents) as any).result}
-      <br />
-      {inboundLinks.length > 0 && (
+      {post.inboundLinks.length > 0 && (
         <>
           <br />
-          Inbound Links:
-          <ul>
-            {inboundLinks.map((link) => (
-              <li key={link}>
-                <Link href="/posts/[id]" as={`/posts/${link}`}>
-                  <a>{link}</a>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <h3>Inbound Links</h3>
+          {post.inboundLinks.map((link) => (
+            <Link href="/posts/[id]" as={`/posts/${link.id}`} key={link.id}>
+              <button className="text-left mb-2 bg-gray-200 p-2">
+                <b>{link.title}</b>
+                <p>{link.context}</p>
+              </button>
+            </Link>
+          ))}
         </>
       )}
     </Layout>
@@ -64,20 +46,18 @@ export default function Post({
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllPostIds();
+  const paths = await getAllPostIds();
   return {
-    paths,
+    paths: paths.map((path) => `/posts/${path}`),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const inboundLinksMap = getInboundLinksMap();
-  const postData = await getPostData(params.id);
+  const post = await getPostData(params.id.toString());
   return {
     props: {
-      postData,
-      inboundLinks: inboundLinksMap.get(params.id.toString()) || [],
+      post,
     },
   };
 };

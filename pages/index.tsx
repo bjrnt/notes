@@ -1,7 +1,7 @@
 import Layout from "../components/layout";
-import { getSortedPostsData } from "../lib/posts";
 import Link from "next/link";
 import { GetStaticProps } from "next";
+import { getPostsIndex } from "../lib/posts";
 
 export default function Home({ allPostsData }) {
   return (
@@ -26,7 +26,7 @@ export default function Home({ allPostsData }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = getSortedPostsData();
+  const allPostsData = getPostsIndex();
   return {
     props: { allPostsData },
   };
