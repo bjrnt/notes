@@ -10,7 +10,8 @@
 
 # next.js
 /.next/
-/out/
+# disable temporarily until deploys have been figured out
+# /out/
 
 # production
 /build
