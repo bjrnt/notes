@@ -10537,6 +10537,83 @@ function interrupt(list, tokenizers, ctx, parameters) {
 
 /***/ }),
 
+/***/ "./node_modules/remark-numbered-footnotes/dist/index.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/remark-numbered-footnotes/dist/index.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var visit = __webpack_require__(/*! unist-util-visit */ "./node_modules/unist-util-visit/index.js");
+
+function plugin() {
+  return transformer;
+}
+
+function transformer(tree) {
+  var footnotes = {};
+  visit(tree, 'footnote', convert);
+  visit(tree, 'footnoteDefinition', createIds(footnotes));
+  visit(tree, 'footnoteReference', replaceIds(footnotes));
+}
+
+function convert(node, index, parent) {
+  var id = autoId(node.position.start);
+  var footnoteDefinition = {
+    type: 'footnoteDefinition',
+    identifier: id,
+    children: [{
+      type: 'paragraph',
+      children: node.children
+    }]
+  };
+  var footnoteReference = {
+    type: 'footnoteReference',
+    identifier: id
+  };
+  parent.children.splice(index, 1, footnoteReference, footnoteDefinition);
+}
+
+function createIds(footnotes) {
+  return function (node, index, parent) {
+    var identifier = node.identifier;
+
+    if (!footnotes.hasOwnProperty(identifier)) {
+      footnotes[identifier] = Object.keys(footnotes).length + 1;
+    }
+
+    node.identifier = String(footnotes[identifier]);
+    node.label = String(footnotes[identifier]);
+  };
+}
+
+function replaceIds(footnotes) {
+  return function (node, index, parent) {
+    var identifier = node.identifier;
+
+    if (!footnotes.hasOwnProperty(identifier)) {
+      footnotes[identifier] = Object.keys(footnotes).length + 1;
+    }
+
+    node.identifier = String(footnotes[identifier]);
+    node.label = String(footnotes[identifier]);
+  };
+}
+
+function autoId(node) {
+  var line = node.line,
+      column = node.column,
+      offset = node.offset;
+  return "l".concat(line, "c").concat(column, "o").concat(offset);
+}
+
+module.exports = plugin;
+
+/***/ }),
+
 /***/ "./node_modules/remark-parse/index.js":
 /*!********************************************!*\
   !*** ./node_modules/remark-parse/index.js ***!
@@ -18106,11 +18183,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var remark_parse__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(remark_parse__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var remark_footnotes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! remark-footnotes */ "./node_modules/remark-footnotes/index.js");
 /* harmony import */ var remark_footnotes__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(remark_footnotes__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _components_markdown_link__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/markdown-link */ "./components/markdown-link.tsx");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _markdown_module_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./markdown.module.css */ "./pages/posts/markdown.module.css");
-/* harmony import */ var _markdown_module_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_markdown_module_css__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var remark_numbered_footnotes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! remark-numbered-footnotes */ "./node_modules/remark-numbered-footnotes/dist/index.js");
+/* harmony import */ var remark_numbered_footnotes__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(remark_numbered_footnotes__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _components_markdown_link__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/markdown-link */ "./components/markdown-link.tsx");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _markdown_module_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./markdown.module.css */ "./pages/posts/markdown.module.css");
+/* harmony import */ var _markdown_module_css__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_markdown_module_css__WEBPACK_IMPORTED_MODULE_10__);
 var _jsxFileName = "/Users/bjorn/projects/nextjs-blog/pages/posts/[id].tsx";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_2__["createElement"];
 
@@ -18123,12 +18202,13 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_2__["createElement"];
 
 
 
+
 var markdownProcessor = unified__WEBPACK_IMPORTED_MODULE_1___default()().use(remark_parse__WEBPACK_IMPORTED_MODULE_5___default.a).use(remark_footnotes__WEBPACK_IMPORTED_MODULE_6___default.a, {
   inlineNotes: true
-}).use(remark_rehype__WEBPACK_IMPORTED_MODULE_3___default.a).use(rehype_react__WEBPACK_IMPORTED_MODULE_4___default.a, {
+}).use(remark_numbered_footnotes__WEBPACK_IMPORTED_MODULE_7___default.a).use(remark_rehype__WEBPACK_IMPORTED_MODULE_3___default.a).use(rehype_react__WEBPACK_IMPORTED_MODULE_4___default.a, {
   createElement: react__WEBPACK_IMPORTED_MODULE_2__["createElement"],
   components: {
-    a: _components_markdown_link__WEBPACK_IMPORTED_MODULE_7__["MarkdownLink"]
+    a: _components_markdown_link__WEBPACK_IMPORTED_MODULE_8__["MarkdownLink"]
   }
 });
 var __N_SSG = true;
@@ -18138,22 +18218,22 @@ function Post(_ref) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 28,
+      lineNumber: 30,
       columnNumber: 5
     }
   }, __jsx("div", {
-    className: _markdown_module_css__WEBPACK_IMPORTED_MODULE_9___default.a.container,
+    className: _markdown_module_css__WEBPACK_IMPORTED_MODULE_10___default.a.container,
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 29,
+      lineNumber: 31,
       columnNumber: 7
     }
   }, markdownProcessor.processSync(post.contents).result), __jsx("br", {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 32,
+      lineNumber: 34,
       columnNumber: 7
     }
   }), post.inboundLinks.length > 0 && __jsx(InboundLinks, {
@@ -18161,7 +18241,7 @@ function Post(_ref) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 34,
+      lineNumber: 36,
       columnNumber: 9
     }
   }));
@@ -18176,7 +18256,7 @@ function InboundLinks(_ref2) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 42,
+      lineNumber: 44,
       columnNumber: 5
     }
   }, __jsx("h5", {
@@ -18184,7 +18264,7 @@ function InboundLinks(_ref2) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 43,
+      lineNumber: 45,
       columnNumber: 7
     }
   }, "Inbound Links"), __jsx("div", {
@@ -18192,18 +18272,18 @@ function InboundLinks(_ref2) {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 44,
+      lineNumber: 46,
       columnNumber: 7
     }
   }, links.map(function (link) {
-    return __jsx(next_link__WEBPACK_IMPORTED_MODULE_8___default.a, {
+    return __jsx(next_link__WEBPACK_IMPORTED_MODULE_9___default.a, {
       href: "/posts/[id]",
       as: "/posts/".concat(link.id),
       key: link.id,
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 46,
+        lineNumber: 48,
         columnNumber: 11
       }
     }, __jsx("button", {
@@ -18211,14 +18291,14 @@ function InboundLinks(_ref2) {
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 47,
+        lineNumber: 49,
         columnNumber: 13
       }
     }, __jsx("strong", {
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 48,
+        lineNumber: 50,
         columnNumber: 15
       }
     }, link.title), __jsx("div", {
@@ -18226,7 +18306,7 @@ function InboundLinks(_ref2) {
       __self: _this,
       __source: {
         fileName: _jsxFileName,
-        lineNumber: 49,
+        lineNumber: 51,
         columnNumber: 15
       }
     }, markdownProcessor.processSync(link.context).result)));

@@ -7,6 +7,7 @@ import remark2rehype from "remark-rehype";
 import rehype2react from "rehype-react";
 import markdown from "remark-parse";
 import footnotes from "remark-footnotes";
+import numberedFootnotes from "remark-numbered-footnotes";
 import { MarkdownLink } from "../../components/markdown-link";
 import Link from "next/link";
 import { Post as PostData } from "../../lib/post";
@@ -15,6 +16,7 @@ import styles from "./markdown.module.css";
 const markdownProcessor = unified()
   .use(markdown)
   .use(footnotes, { inlineNotes: true })
+  .use(numberedFootnotes)
   .use(remark2rehype)
   .use(rehype2react, {
     createElement: React.createElement,
