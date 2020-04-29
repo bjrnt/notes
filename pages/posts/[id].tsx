@@ -10,6 +10,7 @@ import footnotes from "remark-footnotes";
 import { MarkdownLink } from "../../components/markdown-link";
 import Link from "next/link";
 import { Post as PostData } from "../../lib/post";
+import styles from "./markdown.module.css";
 
 const markdownProcessor = unified()
   .use(markdown)
@@ -25,23 +26,34 @@ const markdownProcessor = unified()
 export default function Post({ post }: { post: PostData }) {
   return (
     <Layout>
-      {(markdownProcessor.processSync(post.contents) as any).result}
+      <div className={styles.container}>
+        {(markdownProcessor.processSync(post.contents) as any).result}
+      </div>
       <br />
       {post.inboundLinks.length > 0 && (
-        <>
-          <br />
-          <h3>Inbound Links</h3>
-          {post.inboundLinks.map((link) => (
-            <Link href="/posts/[id]" as={`/posts/${link.id}`} key={link.id}>
-              <button className="text-left mb-2 bg-gray-200 p-2">
-                <b>{link.title}</b>
-                <p>{link.context}</p>
-              </button>
-            </Link>
-          ))}
-        </>
+        <InboundLinks links={post.inboundLinks} />
       )}
     </Layout>
+  );
+}
+
+function InboundLinks({ links }) {
+  return (
+    <div className="bg-gray-200 p-3 rounded-lg">
+      <h5 className="mt-0 text-gray-500 leading-tight mb-2">Inbound Links</h5>
+      <div className="flex flex-wrap">
+        {links.map((link) => (
+          <Link href="/posts/[id]" as={`/posts/${link.id}`} key={link.id}>
+            <button className="w-1/2 h-32 text-left p-2 opacity-50 hover:opacity-75 hover:bg-gray-400 rounded-md text-sm flex flex-col">
+              <strong>{link.title}</strong>
+              <div className="overflow-y-auto text-gray-700">
+                {(markdownProcessor.processSync(link.context) as any).result}
+              </div>
+            </button>
+          </Link>
+        ))}
+      </div>
+    </div>
   );
 }
 

@@ -7,7 +7,10 @@ export default class CustomDocument extends Document {
 
   render() {
     return (
-      <Html className="text-gray-900 antialiased leading-normal bg-gray-100 whitespace-normal">
+      <Html
+        style={{ fontSize: "17px" }}
+        className="text-gray-900 antialiased leading-normal bg-gray-100 whitespace-normal font-sans leading-normal tracking-normal text-base"
+      >
         <Head />
         <body>
           <Main />

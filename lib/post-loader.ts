@@ -1,13 +1,14 @@
 import { Post } from "./post";
 import unified from "unified";
 import markdown from "remark-parse";
+import footnotes from "remark-footnotes";
 import vfile from "to-vfile";
 import { VFile } from "vfile";
 import { postFilenameToId } from "./posts";
 import { outboundLinks } from "./outbound-links";
 import { titles } from "./titles";
 
-const parser = unified().use(markdown);
+const parser = unified().use(markdown).use(footnotes);
 const processor = unified().use(outboundLinks).use(titles);
 
 export async function loadAllPosts(

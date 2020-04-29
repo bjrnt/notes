@@ -1,0 +1,6 @@
+.container {
+}
+
+.container * + * {
+  @apply mt-1;
+}

@@ -1,15 +1,11 @@
 import visit from "unist-util-visit-parents";
 import is from "unist-util-is";
-import markdown from "remark-parse";
-import stripMarkdown from "strip-markdown";
 import unified from "unified";
 import remarkStringify from "remark-stringify";
+import { formatContext } from "./context-formatter";
 
 // TODO: remake strip-markdown later to have better control over contexts
-const contextProcessor = unified()
-  .use(markdown)
-  .use(stripMarkdown)
-  .use(remarkStringify);
+const contextProcessor = unified().use(remarkStringify);
 
 function isLocalMarkdownLink(url: string): boolean {
   return url.match(/^\.\/.+\.md$/) != null;
@@ -17,7 +13,6 @@ function isLocalMarkdownLink(url: string): boolean {
 
 export function outboundLinks() {
   function outboundLinksTransformer(tree, file) {
-    console.log(file.stem);
     const urlToLink = new Map();
     const identifierToUrl = new Map();
 
@@ -28,8 +23,8 @@ export function outboundLinks() {
     function linkVisitor(node, ancestors) {
       if (node.url && isLocalMarkdownLink(node.url)) {
         const contextNode = findClosestParagraph(ancestors);
-        const strippedContext = contextProcessor.runSync(contextNode);
-        const contextMd = contextProcessor.stringify(strippedContext);
+        const formattedContext = formatContext(contextNode, node);
+        const contextMd = contextProcessor.stringify(formattedContext);
         if (!urlToLink.has(node.url)) {
           urlToLink.set(node.url, { context: contextMd, url: node.url });
         }
@@ -44,9 +39,11 @@ export function outboundLinks() {
       const url = identifierToUrl.get(node.identifier);
       if (url != null) {
         const contextNode = findClosestParagraph(ancestors);
-        const strippedContext = contextProcessor.runSync(contextNode);
-        const contextMd = contextProcessor.stringify(strippedContext);
-        urlToLink.set(url, { context: contextMd, url });
+        const formattedContext = formatContext(contextNode, node);
+        const contextMd = contextProcessor.stringify(formattedContext);
+        if (!urlToLink.has(url)) {
+          urlToLink.set(url, { context: contextMd, url });
+        }
       }
     }
 
