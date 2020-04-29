@@ -142,13 +142,26 @@ function MarkdownLink(_ref) {
     }, children));
   }
 
+  if (rest.className === "footnote-ref") {
+    return __jsx("a", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+      href: href
+    }, rest, {
+      __self: this,
+      __source: {
+        fileName: _jsxFileName,
+        lineNumber: 15,
+        columnNumber: 7
+      }
+    }), "[", children, "]");
+  }
+
   return __jsx("a", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
     href: href
   }, rest, {
     __self: this,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 14,
+      lineNumber: 22,
       columnNumber: 5
     }
   }), children);

@@ -10,6 +10,14 @@ export function MarkdownLink({ href, children, ...rest }: any) {
     );
   }
 
+  if (rest.className === "footnote-ref") {
+    return (
+      <a href={href} {...rest}>
+        [{children}]
+      </a>
+    );
+  }
+
   return (
     <a href={href} {...rest}>
       {children}
