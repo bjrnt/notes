@@ -1,0 +1,3 @@
+[submodule "posts"]
+	path = zettelkasten
+	url = git@github.com:bjrnt/zettelkasten.git

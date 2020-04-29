@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Post } from "./post";
 import { loadAllPosts } from "./post-loader";
+import shuffle from "lodash/shuffle";
 
 const postsDirectory = path.join(process.cwd(), "posts");
 let cachedPostsMap: Map<string, Post> | null = null;
@@ -38,8 +39,15 @@ export async function getPostData(id: string): Promise<Post> {
   return cachedPostsMap.get(id);
 }
 
-export function getPostsIndex() {
-  return [];
+export async function getPostsIndex(): Promise<
+  { id: string; title: string }[]
+> {
+  await loadPostsMap();
+  const posts = Array.from(cachedPostsMap.values());
+  const shuffled = shuffle(posts);
+  return shuffled
+    .map((post) => ({ id: post.id, title: post.title }))
+    .slice(0, 5);
 }
 
 async function loadPostsMap() {

@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next build && next export",
+    "serve": "cd ./out && python -m SimpleHTTPServer 3030",
     "start": "next start",
     "mdast": "node ./tools/print-mdast"
   },
   "dependencies": {
-    "@types/react-dom": "^16.9.6",
+    "lodash": "^4.17.15",
     "next": "9.3.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -18,7 +20,6 @@
     "remark-footnotes": "^1.0.0",
     "remark-parse": "^8.0.2",
     "remark-stringify": "^8.0.0",
-    "strip-markdown": "^3.1.2",
     "to-vfile": "^6.1.0",
     "unified": "^9.0.0",
     "unist-util-is": "^4.0.2",
@@ -30,6 +31,7 @@
     "@fullhuman/postcss-purgecss": "^2.1.2",
     "@types/node": "^13.13.2",
     "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.6",
     "postcss-preset-env": "^6.7.0",
     "remark-rehype": "^6.0.0",
     "stylelint-config-recommended": "^3.0.0",

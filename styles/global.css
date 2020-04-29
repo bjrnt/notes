@@ -9,21 +9,21 @@ p {
 }
 
 h1 {
-  @apply heading text-4xl;
+  @apply heading text-3xl;
 }
 
 h2 {
-  @apply heading text-2xl;
+  @apply heading text-xl;
 }
 
 h3 {
-  @apply heading text-2xl;
+  @apply heading text-xl;
 }
 
 h4,
 h5,
 h6 {
-  @apply heading text-xl;
+  @apply heading text-lg;
 }
 
 a {
@@ -35,7 +35,7 @@ a:hover {
 }
 
 .list-common {
-  @apply list-inside ml-4;
+  @apply ml-6 list-outside;
 }
 
 ul {
