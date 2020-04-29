@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "sync-images": "cp -r ./posts/images ./public/images",
     "dev": "next dev",
     "build": "next build",
     "export": "next build && next export",

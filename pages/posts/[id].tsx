@@ -22,6 +22,7 @@ const markdownProcessor = unified()
     createElement: React.createElement,
     components: {
       a: MarkdownLink,
+      img: Image,
     },
   });
 
@@ -37,6 +38,11 @@ export default function Post({ post }: { post: PostData }) {
       )}
     </Layout>
   );
+}
+
+function Image({ src, ...rest }) {
+  const modifiedSrc = `/${src.slice(2)}`;
+  return <img src={modifiedSrc} {...rest} />;
 }
 
 function InboundLinks({ links }) {
