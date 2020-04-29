@@ -3,7 +3,11 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import { getPostsIndex } from "../lib/posts";
 
-export default function Home({ allPostsData }) {
+export default function Home({
+  posts,
+}: {
+  posts: { id: string; title: string }[];
+}) {
   return (
     <Layout>
       <h1>Welcome!</h1>
@@ -21,7 +25,7 @@ export default function Home({ allPostsData }) {
       </p>
       <span>Here is a random selection of posts to start browsing from:</span>
       <ul>
-        {allPostsData.map(({ id, title }) => (
+        {posts.map(({ id, title }) => (
           <li key={id}>
             <Link href="/posts/[id]" as={`/posts/${id}`}>
               <a>{title}</a>
@@ -34,8 +38,8 @@ export default function Home({ allPostsData }) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = await getPostsIndex();
+  const posts = await getPostsIndex();
   return {
-    props: { allPostsData },
+    props: { posts },
   };
 };

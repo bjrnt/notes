@@ -1,9 +1,11 @@
 import visit from "unist-util-visit";
 import is from "unist-util-is";
 import unist from "unist";
+import { VFile } from "vfile";
+import { Transformer } from "unified";
 
-export function titles() {
-  function titleTransformer(tree, file) {
+export function titles(): Transformer {
+  function titleTransformer(tree: unist.Parent, file: VFile) {
     let title = "";
 
     visit(tree, "heading", headingVisitor);

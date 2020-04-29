@@ -1,7 +1,13 @@
-import Document, { Html, Main, Head, NextScript } from "next/document";
+import Document, {
+  Html,
+  Main,
+  Head,
+  NextScript,
+  DocumentContext,
+} from "next/document";
 
 export default class CustomDocument extends Document {
-  static async getInitialProps(ctx: any) {
+  static async getInitialProps(ctx: DocumentContext) {
     return { ...(await Document.getInitialProps(ctx)) };
   }
 

@@ -8,7 +8,7 @@ import rehype2react from "rehype-react";
 import markdown from "remark-parse";
 import footnotes from "remark-footnotes";
 import numberedFootnotes from "remark-numbered-footnotes";
-import { MarkdownLink } from "../../components/markdown-link";
+import { MarkdownLink } from "../../components/links";
 import Link from "next/link";
 import { Post as PostData } from "../../lib/post";
 import styles from "./markdown.module.css";

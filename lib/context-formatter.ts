@@ -1,4 +1,6 @@
-const formatMap = {
+import * as unist from "unist";
+
+const formatMap: any = {
   heading: paragraph,
   text: text,
   inlineCode: text,
@@ -17,20 +19,21 @@ const formatMap = {
   footnoteReference: empty,
 
   code: empty,
-  horizontalRule: empty,
   thematicBreak: empty,
   html: empty,
   table: empty,
   tableCell: empty,
   definition: empty,
   yaml: empty,
-  toml: empty,
 };
 
 // got to be careful here not to edit the original nodes, as that would break any other references that exist within the same context
-export function formatContext(context, highlighted) {
-  function one(node) {
-    let newNode = { ...node };
+export function formatContext(
+  context: unist.Parent,
+  highlighted: unist.Parent
+): unist.Parent {
+  function one(node: unist.Node | unist.Parent): any {
+    let newNode: any = { ...node };
     const type = newNode && newNode.type;
 
     if (node === highlighted) {
@@ -44,13 +47,13 @@ export function formatContext(context, highlighted) {
     }
 
     if (newNode.children) {
-      newNode.children = all(newNode.children);
+      newNode.children = all(newNode.children as unist.Node[]);
     }
 
     return newNode;
   }
 
-  function all(nodes) {
+  function all(nodes: any[]) {
     let index = -1;
     const length = nodes.length;
     let result = [];
@@ -58,7 +61,7 @@ export function formatContext(context, highlighted) {
     while (++index < length) {
       const value = one(nodes[index]);
       if (value && typeof value.length === "number") {
-        result = result.concat(value.map(one));
+        result = result.concat((value as any).map(one));
       } else {
         result.push(value);
       }
@@ -68,15 +71,14 @@ export function formatContext(context, highlighted) {
   }
 
   // merges texts
-  function clean(values) {
-    var index = -1;
-    var length = values.length;
-    var result = [];
-    var previous = null;
-    var value;
+  function clean(values: any[]) {
+    let index = -1;
+    const length = values.length;
+    const result = [];
+    let previous = null;
 
     while (++index < length) {
-      value = values[index];
+      const value = values[index];
 
       if (previous && "value" in value && value.type === previous.type) {
         previous.value += value.value;
@@ -89,29 +91,29 @@ export function formatContext(context, highlighted) {
     return result;
   }
 
-  return one({ ...context });
+  return one({ ...context } as typeof context);
 }
 
-function text(node) {
+function text(node: unist.Literal): unist.Literal {
   return { type: "text", value: node.value };
 }
 
-function paragraph(node) {
+function paragraph(node: unist.Parent): unist.Parent {
   return { type: "paragraph", children: node.children };
 }
 
-function children(node) {
+function children(node: unist.Parent): unist.Node[] {
   return node.children || [];
 }
 
-function lineBreak() {
+function lineBreak(): unist.Literal {
   return { type: "text", value: "\n" };
 }
 
-function empty() {
+function empty(): unist.Literal {
   return { type: "text", value: "" };
 }
 
-function strong(node) {
+function strong(node: unist.Parent): unist.Parent {
   return { type: "strong", children: node.children };
 }
